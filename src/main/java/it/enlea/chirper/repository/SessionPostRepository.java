@@ -19,7 +19,7 @@ public class SessionPostRepository implements PostRepository {
 	@Override
 	public Post insertPost(Post post) {
 		if(post!=null) {
-			postMap.computeIfAbsent(post.getUserName(), k->new ArrayList<Post>()).add(post);
+			getPostListByUserName(post.getUserName()).add(post);
 			return post;
 		}   
 		return null;

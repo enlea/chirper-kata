@@ -4,33 +4,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.sun.org.apache.bcel.internal.Repository;
-
 import it.enlea.chirper.logic.ChirperServiceImpl;
-import it.enlea.chirper.logic.ConsoleFormatter;
+import it.enlea.chirper.logic.ConsoleOutputFormatter;
 import it.enlea.chirper.logic.ChirperServiceInterface;
+import it.enlea.chirper.repository.FollowRepository;
 import it.enlea.chirper.repository.PostRepository;
+import it.enlea.chirper.repository.SessionFollowRepository;
 import it.enlea.chirper.repository.SessionPostRepository;
 import it.enlea.chirper.repository.model.Post;
 
 class ChirperServiceTest {
 
 	
-	static ChirperServiceInterface service;
-	static PostRepository postRepository;
+	ChirperServiceInterface service;
+	PostRepository postRepository;
+	FollowRepository followRepository;
 	
-	@BeforeAll
-	static void initService() {
+	@BeforeEach
+	void initService() {
 		postRepository = new SessionPostRepository();
-		service = new ChirperServiceImpl(postRepository);
+		followRepository = new SessionFollowRepository();
+		service = new ChirperServiceImpl(postRepository, followRepository);
 	}
 
 	@Test
@@ -67,10 +68,16 @@ class ChirperServiceTest {
 		
 		Collections.reverse(testList);
 		
-		String expected	= ConsoleFormatter.formatPostList(testList);
+		String expected	= ConsoleOutputFormatter.formatPostList(testList);
 		String output	= service.read("anna");
 		assertEquals(expected, output);
 		
+	}
+	
+	@Test
+	void followAUserShouldReturnEmpty() {
+		String output = service.follows("elsa", "anna");
+		assertEquals("",output);
 	}
 
 }

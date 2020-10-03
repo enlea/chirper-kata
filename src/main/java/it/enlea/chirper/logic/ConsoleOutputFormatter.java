@@ -6,7 +6,7 @@ import java.util.List;
 
 import it.enlea.chirper.repository.model.Post;
 
-public class ConsoleFormatter {
+public class ConsoleOutputFormatter {
 	
 	
 	private static String POST_PATTERN ="> %s (%d minutes ago)\n";
