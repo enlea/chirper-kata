@@ -1,4 +1,4 @@
-package it.enlea.chirper.unit;
+package it.enlea.chirper.unit.client;
 
 import static org.junit.jupiter.api.Assertions.*;
 
