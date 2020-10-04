@@ -4,79 +4,38 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.enlea.chirper.logic.ChirperServiceImpl;
 import it.enlea.chirper.logic.ConsoleOutputFormatter;
-import it.enlea.chirper.logic.ChirperServiceInterface;
+import it.enlea.chirper.logic.commands.SocialNetworkCommand;
+import it.enlea.chirper.logic.commands.WallCommand;
 import it.enlea.chirper.repository.FollowRepository;
 import it.enlea.chirper.repository.PostRepository;
 import it.enlea.chirper.repository.SessionFollowRepository;
 import it.enlea.chirper.repository.SessionPostRepository;
 import it.enlea.chirper.repository.model.Post;
 
-class ChirperServiceTest {
+class WallCommandTest {
 
 	
-	ChirperServiceInterface service;
+	SocialNetworkCommand command;
 	PostRepository postRepository;
 	FollowRepository followRepository;
 	SortedSet<Post> testList = new TreeSet<Post>();
 
 	@BeforeEach
-	void initService() {
+	void initCommand() {
 		postRepository = new SessionPostRepository();
 		followRepository = new SessionFollowRepository();
-		service = new ChirperServiceImpl(postRepository, followRepository);
+		command = new WallCommand(postRepository, followRepository);
 	}
 
-	@Test
-	void insertAPostShouldReturnEmptyString() {
-		String output = service.postMessage("elsa", "let it goo");
-		assertEquals("",output);
-	}
-	
-	@Test
-	void insertAnEmpityPostShouldReturnEmptyStringAndShuldNotAddMessage() {
-		String userName = "elsa";
-		int previousMessageNum = postRepository.getPostListByUserName(userName).size();
-		String output = service.postMessage(userName, "");
-		assertEquals("",output);
-		assertEquals(previousMessageNum,postRepository.getPostListByUserName(userName).size() );
-	}
-	
-	@Test 
-	void readUnkowUserMessagesShouldReturnEmptyString(){
-		String output = service.read("olaf");
-		assertEquals("",output);
-	}
-	
-	@Test 
-	void readUserMessageShouldWork() {
-		SortedSet<Post> testList = new TreeSet<Post>();
-		LocalDateTime now = LocalDateTime.now();
-		testList.add(new Post("anna", "I love winter",  now.minus(10,ChronoUnit.MINUTES)));
-		testList.add(new Post("anna", "Olaf where are you?", now.minus(5,ChronoUnit.MINUTES)));
-		testList.add(new Post("anna", "Bye bye!", now.minus(2,ChronoUnit.MINUTES)));
-		
-		for(Post p : testList)
-			postRepository.insertPost(p);
-		
-		String expected	= ConsoleOutputFormatter.formatReadPostList(testList);
-		String output	= service.read("anna");
-		assertEquals(expected, output);
-		
-	}
-	
-	@Test
-	void followAUserShouldReturnEmpty() {
-		String output = service.follows("elsa", "anna");
-		assertEquals("",output);
-	}
 	
 	@Test
 	void wallOfAUserShouldWork() {
@@ -85,8 +44,8 @@ class ChirperServiceTest {
 		followRepository.insertFollowRelationship("anna", "elsa");
 		followRepository.insertFollowRelationship("anna", "olaf");
 		String expected = ConsoleOutputFormatter.formatWallPostList(testList);
-		
-		String output = service.wall("anna");
+		List<String> params = Arrays.asList("anna");
+		String output = command.execute(params);
 		assertEquals(expected, output);
 	}
 	
@@ -95,7 +54,8 @@ class ChirperServiceTest {
 		createTestPostList();
 		insertTestPostListInRepository();
 		followRepository.insertFollowRelationship("anna", "elsa");
-		String output = service.wall("charile");
+		List<String> params = Arrays.asList("charile");
+		String output = command.execute(params);
 		assertEquals("", output);
 	}
 	
@@ -107,7 +67,8 @@ class ChirperServiceTest {
 		SortedSet<Post> userPost = postRepository.getPostListByUserName(username);
 		
 		String expected = ConsoleOutputFormatter.formatWallPostList(userPost);
-		String output = service.wall(username);
+		List<String> params = Arrays.asList(username);
+		String output = command.execute(params);
 		
 		assertEquals(expected, output);
 		

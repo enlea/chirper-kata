@@ -4,6 +4,12 @@ import java.util.Scanner;
 
 import it.enlea.chirper.client.ChirperClientInterface;
 import it.enlea.chirper.client.ConsoleClient;
+import it.enlea.chirper.client.InputCommandParser;
+import it.enlea.chirper.logic.commands.CommandInvoker;
+import it.enlea.chirper.repository.FollowRepository;
+import it.enlea.chirper.repository.PostRepository;
+import it.enlea.chirper.repository.SessionFollowRepository;
+import it.enlea.chirper.repository.SessionPostRepository;
 
 public class ChirperApp {
 	
@@ -30,7 +36,11 @@ public class ChirperApp {
 	}
 
 	public static void main(String[] args) {
-       ChirperClientInterface client = new ConsoleClient(); 
+	   PostRepository postRepository = new SessionPostRepository();
+	   FollowRepository followRepository = new SessionFollowRepository();
+	   CommandInvoker invoker = new CommandInvoker (postRepository,followRepository);
+	   InputCommandParser parser = new InputCommandParser();
+       ChirperClientInterface client = new ConsoleClient(invoker, parser); 
        ChirperApp application = new ChirperApp(client);
        application.start();
        
