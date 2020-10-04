@@ -1,14 +1,16 @@
 package it.enlea.chirper.repository;
 
-import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 import it.enlea.chirper.repository.model.Post;
 
 public interface PostRepository {
 
-	Post insertPost(Post post);
+	void insertPost(Post post);
 		
-	List<Post> getPostListByUserName(String userName);
+	SortedSet<Post> getPostListByUserName(String userName);
 	
+	SortedSet<Post> getPostListBySetOfUserName(Set<String> userNameSet);
 
 }

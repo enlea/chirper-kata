@@ -1,12 +1,11 @@
 package it.enlea.chirper.logic;
 
 import static it.enlea.chirper.logic.ParameterValidator.*;
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
 import it.enlea.chirper.repository.FollowRepository;
 import it.enlea.chirper.repository.PostRepository;
-import it.enlea.chirper.repository.RepositoryManager;
 import it.enlea.chirper.repository.model.Post;
 
 public class ChirperServiceImpl implements ChirperServiceInterface {
@@ -30,9 +29,8 @@ public class ChirperServiceImpl implements ChirperServiceInterface {
 
 	@Override
 	public String read(String userName) {
-		List<Post> postList = postRepository.getPostListByUserName(userName);
-		Collections.reverse(postList);
-		String output = ConsoleOutputFormatter.formatPostList(postList);
+		SortedSet<Post> postList = postRepository.getPostListByUserName(userName);
+		String output = ConsoleOutputFormatter.formatReadPostList(postList);
 		return output;
 	}
 
@@ -42,6 +40,18 @@ public class ChirperServiceImpl implements ChirperServiceInterface {
 			followRepository.insertFollowRelationship(userName, following);
 		}
 		return "";
+	}
+
+	@Override
+	public String wall(String userName) {
+		String userWall = new String();
+		if(isValidUsername(userName)) {
+			Set<String> usersToShow = followRepository.getFollowingUserByUserName(userName);
+			usersToShow.add(userName);
+			SortedSet<Post> wallPosts= postRepository.getPostListBySetOfUserName(usersToShow);
+			userWall = ConsoleOutputFormatter.formatWallPostList(wallPosts); 
+		}
+		return userWall;
 	}
 
 }

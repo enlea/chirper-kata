@@ -34,9 +34,9 @@ public class Post implements Comparable<Post> {
 	@Override
 	public int compareTo(Post o) {
 		if (getTimeStamp().isBefore(o.getTimeStamp()))
-			return -1;
-		else if(getTimeStamp().isAfter(o.getTimeStamp())) 
 			return 1;
+		else if(getTimeStamp().isAfter(o.getTimeStamp())) 
+			return -1;
 		else 
 			return 0;
 	}

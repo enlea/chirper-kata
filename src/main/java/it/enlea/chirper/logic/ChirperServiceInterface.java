@@ -7,4 +7,6 @@ public interface ChirperServiceInterface {
 	public String read(String userName);
 	
 	public String follows(String userName, String following);
+	
+	public String wall(String userName);
 }

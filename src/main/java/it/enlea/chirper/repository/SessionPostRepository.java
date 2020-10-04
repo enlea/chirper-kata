@@ -4,33 +4,41 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import it.enlea.chirper.repository.model.Post;
 
 public class SessionPostRepository implements PostRepository {
 	
-	private HashMap<String, List<Post>> postMap; 
+	private Map<String, SortedSet<Post>> postMap; 
 
 	public SessionPostRepository() {
-		this.postMap = new HashMap<String, List<Post>>();
+		this.postMap = new HashMap<String, SortedSet<Post>>();
 	}
 
 	@Override
-	public Post insertPost(Post post) {
+	public void insertPost(Post post) {
 		if(post!=null) {
 			getPostListByUserName(post.getUserName()).add(post);
-			return post;
 		}   
-		return null;
 	}
 
 	@Override
-	public List<Post> getPostListByUserName(String userName){
+	public SortedSet<Post> getPostListByUserName(String userName){
 		if(!postMap.containsKey(userName)) {
-			postMap.put(userName, new ArrayList<Post>());
+			postMap.put(userName, new TreeSet<Post>());
 		}
 		return postMap.get(userName);
+	}
+
+	@Override
+	public SortedSet<Post> getPostListBySetOfUserName(Set<String> userNameSet){
+		SortedSet<Post> postList = new TreeSet<Post>();
+		userNameSet.forEach(u -> postList.addAll(getPostListByUserName(u)));
+		return postList;
 	}
 
   
