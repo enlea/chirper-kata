@@ -17,6 +17,7 @@ import it.enlea.chirper.repository.SessionPostRepository;
 public class ChirperApp {
 	
 	private static final String NEW_LINE = "> ";
+	private static final String END = "exit";
 	
 	private ChirperClientInterface client;
 	
@@ -28,7 +29,7 @@ public class ChirperApp {
 	public void start() {
 		Scanner scanner = new Scanner(System.in);
         String inputCommand = "";
-        while (true) {
+        while (inputCommand.compareTo(END)!=0) {
             System.out.print(NEW_LINE);
             inputCommand = scanner.nextLine();
             String result= client.processCommand(inputCommand);
@@ -36,6 +37,7 @@ public class ChirperApp {
             	System.out.print(result);
             
         }
+        scanner.close();
 	}
 
 	public static void main(String[] args) {

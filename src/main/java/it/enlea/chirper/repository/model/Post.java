@@ -2,7 +2,7 @@ package it.enlea.chirper.repository.model;
 
 import java.time.LocalDateTime;
 
-import it.enlea.chirper.logic.TimeManager;
+import it.enlea.chirper.logic.ChirperTimeManager;
 
 public class Post implements Comparable<Post> {
 	
@@ -12,7 +12,7 @@ public class Post implements Comparable<Post> {
 	
 	
 	public Post(String userName, String message) {
-		this(userName, message, TimeManager.getInstance().now());
+		this(userName, message, ChirperTimeManager.getInstance().now());
 	}
 
 	public Post(String userName, String message, LocalDateTime timeStamp) {

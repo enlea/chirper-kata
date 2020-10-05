@@ -1,9 +1,7 @@
 package it.enlea.chirper.logic;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.SortedSet;
-
 import it.enlea.chirper.repository.model.Post;
 
 public class ConsoleResponseFormatter implements ResponseFormatter {
@@ -43,7 +41,7 @@ public class ConsoleResponseFormatter implements ResponseFormatter {
 	}
 	
 	private String resolveAgoPattern(Post post) {
-		Duration agoDuration = Duration.between(post.getTimeStamp(), TimeManager.getInstance().now());
+		Duration agoDuration = Duration.between(post.getTimeStamp(), ChirperTimeManager.getInstance().now());
 		long duration = 0;
 		String unit = "second";
 		
@@ -60,7 +58,7 @@ public class ConsoleResponseFormatter implements ResponseFormatter {
 			unit= "minute";
 		}
 		else {
-			duration = agoDuration.toSeconds();
+			duration = agoDuration.getSeconds();
 		}
 		unit += duration>1 ?"s":"";
 		

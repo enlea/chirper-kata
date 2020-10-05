@@ -15,7 +15,7 @@ import it.enlea.chirper.client.InputCommandParser;
 import it.enlea.chirper.logic.ConsoleResponseFormatter;
 import it.enlea.chirper.logic.RequestDispatcher;
 import it.enlea.chirper.logic.ResponseFormatter;
-import it.enlea.chirper.logic.TimeManager;
+import it.enlea.chirper.logic.ChirperTimeManager;
 import it.enlea.chirper.repository.FollowRepository;
 import it.enlea.chirper.repository.PostRepository;
 import it.enlea.chirper.repository.SessionFollowRepository;
@@ -42,11 +42,11 @@ class ChirperAcceptanceTest {
 	
 	@Test
 	void postMessageAcceptanceTest() {
-		TimeManager.getInstance().setClock(createClockMinutesBefore(now,5));
+		ChirperTimeManager.getInstance().setClock(createClockMinutesBefore(now,5));
 		genericCommandTest("Alice -> I love the weather today","");
-		TimeManager.getInstance().setClock(createClockMinutesBefore(now,2));
+		ChirperTimeManager.getInstance().setClock(createClockMinutesBefore(now,2));
 		genericCommandTest("Bob -> Damn! We lost!","");
-		TimeManager.getInstance().setClock(createClockMinutesBefore(now,1));
+		ChirperTimeManager.getInstance().setClock(createClockMinutesBefore(now,1));
 		genericCommandTest("Bob -> Good game though.","");
 	}
 
@@ -55,7 +55,7 @@ class ChirperAcceptanceTest {
 	@Test
 	void readingAliceAndBobTimelineAfterTheyPostedAcceptanceTest() {
 		insertAliceAndBobPosts();
-		TimeManager.getInstance().setClock(createClockMinutesBefore(now, 0));
+		ChirperTimeManager.getInstance().setClock(createClockMinutesBefore(now, 0));
 		genericCommandTest("Alice", "> I love the weather today (5 minutes ago)\n");
 		genericCommandTest("Bob", "> Good game though. (1 minute ago)\n"
 								+ "> Damn! We lost! (2 minutes ago)\n");
@@ -63,12 +63,12 @@ class ChirperAcceptanceTest {
 	@Test
 	void charlieFollowAndWallAcceptanceTest() {
 		insertAliceAndBobPosts();
-		TimeManager.getInstance().setClock(createClockSecondsBefore(now,2));
+		ChirperTimeManager.getInstance().setClock(createClockSecondsBefore(now,2));
 		client.processCommand("Charlie -> I'm in New York today! Anyone wants to have a coffee?");
 		client.processCommand("Charlie follows Alice");
 		String expected =  "> Charlie - I'm in New York today! Anyone wants to have a coffee? (2 seconds ago)\n"
 				+ "> Alice - I love the weather today (5 minutes ago)\n";
-		TimeManager.getInstance().setClock(createClockSecondsBefore(now,0));
+		ChirperTimeManager.getInstance().setClock(createClockSecondsBefore(now,0));
 		genericCommandTest("Charlie wall", expected);
 	
 	}
@@ -76,7 +76,7 @@ class ChirperAcceptanceTest {
 	@Test
 	void followAndWallComplexAcceptanceTest() {
 		insertAliceAndBobPosts();
-		TimeManager.getInstance().setClock(createClockSecondsBefore(now,15));
+		ChirperTimeManager.getInstance().setClock(createClockSecondsBefore(now,15));
 		client.processCommand("Charlie -> I'm in New York today! Anyone wants to have a coffee?");
 		client.processCommand("Charlie follows Alice");
 		client.processCommand("Charlie follows Bob");
@@ -84,18 +84,18 @@ class ChirperAcceptanceTest {
 				+ "> Bob - Good game though. (1 minute ago)\n"
 				+ "> Bob - Damn! We lost! (2 minutes ago)\n"
 				+ "> Alice - I love the weather today (5 minutes ago)\n";
-		TimeManager.getInstance().setClock(createClockSecondsBefore(now,0));
+		ChirperTimeManager.getInstance().setClock(createClockSecondsBefore(now,0));
 		genericCommandTest("Charlie wall", expected);
 	}
 	
 	@Test
 	void followAnUnknowUserAndThenWallAcceptanceTest() {
 		insertAliceAndBobPosts();
-		TimeManager.getInstance().setClock(createClockSecondsBefore(now,2));
+		ChirperTimeManager.getInstance().setClock(createClockSecondsBefore(now,2));
 		client.processCommand("Charlie -> I'm in New York today! Anyone wants to have a coffee?");
 		client.processCommand("Charlie follows Dexter");
 		String expected =  "> Charlie - I'm in New York today! Anyone wants to have a coffee? (2 seconds ago)\n";
-		TimeManager.getInstance().setClock(createClockSecondsBefore(now,0));
+		ChirperTimeManager.getInstance().setClock(createClockSecondsBefore(now,0));
 		genericCommandTest("Charlie wall", expected);
 	}
 	
@@ -114,11 +114,11 @@ class ChirperAcceptanceTest {
 	}
 	
 	private void insertAliceAndBobPosts() {
-		TimeManager.getInstance().setClock(createClockMinutesBefore(now,5));
+		ChirperTimeManager.getInstance().setClock(createClockMinutesBefore(now,5));
 		client.processCommand("Alice -> I love the weather today");
-		TimeManager.getInstance().setClock(createClockMinutesBefore(now,2));
+		ChirperTimeManager.getInstance().setClock(createClockMinutesBefore(now,2));
 		client.processCommand("Bob -> Damn! We lost!");
-		TimeManager.getInstance().setClock(createClockMinutesBefore(now,1));
+		ChirperTimeManager.getInstance().setClock(createClockMinutesBefore(now,1));
 		client.processCommand("Bob -> Good game though.");
 	}
 	

@@ -3,18 +3,18 @@ package it.enlea.chirper.logic;
 import java.time.Clock;
 import java.time.LocalDateTime;
 
-public class TimeManager {
+public class ChirperTimeManager {
 	
 	private Clock clock = Clock.systemDefaultZone();
 	
-	private static TimeManager instance = null;
+	private static ChirperTimeManager instance = null;
 	
-	private TimeManager() {
+	private ChirperTimeManager() {
 		
 	}
-	public static TimeManager getInstance() {
+	public static ChirperTimeManager getInstance() {
 		if (instance == null) {
-			instance = new TimeManager();
+			instance = new ChirperTimeManager();
 		}
 		return instance;
 	}

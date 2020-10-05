@@ -1,7 +1,6 @@
 package it.enlea.chirper.logic.service;
 
 import java.util.SortedSet;
-import it.enlea.chirper.logic.ConsoleResponseFormatter;
 import it.enlea.chirper.logic.ResponseFormatter;
 import it.enlea.chirper.logic.service.parameter.ReadParameters;
 import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;

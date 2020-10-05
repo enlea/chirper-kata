@@ -3,7 +3,6 @@ package it.enlea.chirper.logic.service;
 import java.util.Set;
 import java.util.SortedSet;
 
-import it.enlea.chirper.logic.ConsoleResponseFormatter;
 import it.enlea.chirper.logic.ResponseFormatter;
 import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;
 import it.enlea.chirper.logic.service.parameter.WallParameters;
