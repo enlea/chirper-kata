@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -14,30 +12,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.enlea.chirper.logic.ConsoleOutputFormatter;
-import it.enlea.chirper.logic.commands.ReadCommand;
-import it.enlea.chirper.logic.commands.SocialNetworkCommand;
+import it.enlea.chirper.logic.service.ReadService;
+import it.enlea.chirper.logic.service.SocialNetworkService;
+import it.enlea.chirper.logic.service.parameter.ReadParameters;
+import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;
 import it.enlea.chirper.repository.PostRepository;
 import it.enlea.chirper.repository.SessionPostRepository;
 import it.enlea.chirper.repository.model.Post;
 
-class ReadCommandTest {
+class ReadServiceTest {
 	
-	SocialNetworkCommand command;
+	SocialNetworkService command;
 	PostRepository postRepository;
 
 	@BeforeEach
 	void initCommand() {
 		postRepository = new SessionPostRepository();
-		command = new ReadCommand(postRepository);
+		command = new ReadService(postRepository);
 	}
 
-	
 	@Test 
-	void readUnkowUserMessagesShouldReturnEmptyString(){
-		List<String> params = Arrays.asList("olaf");
-		String output = command.execute(params);
+	void readUnkowUserMessagesShouldReturnEmptyString2(){
+		String username = "olaf";
+		RequestParametersInterface params = new ReadParameters(username);
+		command.setParameter(params);
+		String output = command.execute();
 		assertEquals("",output);
-		assertTrue(postRepository.getPostListByUserName("olaf").isEmpty());
+		assertTrue(postRepository.getPostListByUserName(username).isEmpty());
 	}
 	
 	@Test 
@@ -51,11 +52,14 @@ class ReadCommandTest {
 		testList.forEach(p -> postRepository.insertPost(p));
 		
 		String expected	= ConsoleOutputFormatter.formatReadPostList(testList);
-		List<String> params = Arrays.asList("anna");
-		String output = command.execute(params);
+
+		String username = "anna";
+		RequestParametersInterface params = new ReadParameters(username);
+		command.setParameter(params);
+		
+		String output = command.execute();
 		assertEquals(expected, output);
 		
 	}
-	
 		
 }

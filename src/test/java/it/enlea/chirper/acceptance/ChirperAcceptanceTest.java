@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import it.enlea.chirper.client.ChirperClientInterface;
 import it.enlea.chirper.client.ConsoleClient;
+import it.enlea.chirper.client.ConsoleCommandParser;
 import it.enlea.chirper.client.InputCommandParser;
-import it.enlea.chirper.logic.commands.CommandInvoker;
+import it.enlea.chirper.logic.RequestDispatcher;
 import it.enlea.chirper.repository.FollowRepository;
 import it.enlea.chirper.repository.PostRepository;
 import it.enlea.chirper.repository.SessionFollowRepository;
@@ -24,9 +25,9 @@ class ChirperAcceptanceTest {
 	static void setUp() throws Exception {
 		PostRepository postRepository = new SessionPostRepository();
 		FollowRepository followRepository = new SessionFollowRepository();
-		CommandInvoker invoker = new CommandInvoker (postRepository,followRepository);
-		InputCommandParser parser = new InputCommandParser();
-		client = new ConsoleClient(invoker,parser);
+		InputCommandParser parser = new ConsoleCommandParser();
+		RequestDispatcher invoker = new RequestDispatcher (postRepository,followRepository, parser);
+		client = new ConsoleClient(invoker);
 	}
 
 	

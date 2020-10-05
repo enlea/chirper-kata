@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -13,18 +11,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.enlea.chirper.logic.ConsoleOutputFormatter;
-import it.enlea.chirper.logic.commands.SocialNetworkCommand;
-import it.enlea.chirper.logic.commands.WallCommand;
+import it.enlea.chirper.logic.service.SocialNetworkService;
+import it.enlea.chirper.logic.service.WallCommand;
+import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;
+import it.enlea.chirper.logic.service.parameter.WallParameters;
 import it.enlea.chirper.repository.FollowRepository;
 import it.enlea.chirper.repository.PostRepository;
 import it.enlea.chirper.repository.SessionFollowRepository;
 import it.enlea.chirper.repository.SessionPostRepository;
 import it.enlea.chirper.repository.model.Post;
 
-class WallCommandTest {
+class WallServiceTest {
 
 	
-	SocialNetworkCommand command;
+	SocialNetworkService command;
 	PostRepository postRepository;
 	FollowRepository followRepository;
 	SortedSet<Post> testList = new TreeSet<Post>();
@@ -35,17 +35,17 @@ class WallCommandTest {
 		followRepository = new SessionFollowRepository();
 		command = new WallCommand(postRepository, followRepository);
 	}
-
-	
 	@Test
 	void wallOfAUserShouldWork() {
 		createTestPostList();
 		insertTestPostListInRepository();
 		followRepository.insertFollowRelationship("anna", "elsa");
 		followRepository.insertFollowRelationship("anna", "olaf");
+		
 		String expected = ConsoleOutputFormatter.formatWallPostList(testList);
-		List<String> params = Arrays.asList("anna");
-		String output = command.execute(params);
+		RequestParametersInterface params = new WallParameters("anna");
+		command.setParameter(params);
+		String output = command.execute();
 		assertEquals(expected, output);
 	}
 	
@@ -54,11 +54,13 @@ class WallCommandTest {
 		createTestPostList();
 		insertTestPostListInRepository();
 		followRepository.insertFollowRelationship("anna", "elsa");
-		List<String> params = Arrays.asList("charile");
-		String output = command.execute(params);
+		RequestParametersInterface params = new WallParameters("charile");
+		command.setParameter(params);
+		String output = command.execute();
+		
 		assertEquals("", output);
 	}
-	
+	@Test
 	void wallOfAUserWithNoFollowRelationshipsShouldReturnHisPost() {
 		createTestPostList();
 		insertTestPostListInRepository();
@@ -67,12 +69,11 @@ class WallCommandTest {
 		SortedSet<Post> userPost = postRepository.getPostListByUserName(username);
 		
 		String expected = ConsoleOutputFormatter.formatWallPostList(userPost);
-		List<String> params = Arrays.asList(username);
-		String output = command.execute(params);
+		RequestParametersInterface params = new WallParameters(username);
+		command.setParameter(params);
+		String output = command.execute();
 		
 		assertEquals(expected, output);
-		
-		
 	}
 
 	private void insertTestPostListInRepository() {

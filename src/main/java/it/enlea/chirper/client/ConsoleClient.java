@@ -1,21 +1,21 @@
 package it.enlea.chirper.client;
 
-import it.enlea.chirper.logic.commands.CommandInvoker;
+import it.enlea.chirper.logic.RequestDispatcher;
 
 public class ConsoleClient implements ChirperClientInterface{
 	
-	private CommandInvoker commandInvoker 	= null;
-	private InputCommandParser parser		= null;
+	private RequestDispatcher commandInvoker 	= null;
 	
-	public ConsoleClient(CommandInvoker commandInvoker, InputCommandParser parser) {
+	public ConsoleClient(RequestDispatcher commandInvoker) {
 		this.commandInvoker	= commandInvoker;
-		this.parser			= parser;
 	}
 	
 	@Override
 	public String processCommand(String inputCommand) {
-		parser.parseCommand(inputCommand);
-		return commandInvoker.invokeCommand(parser.getCommandType(), parser.getParameters());
+		
+		return commandInvoker.executeCommand(inputCommand);
 	}
+	
+	
 
 }

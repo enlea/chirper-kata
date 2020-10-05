@@ -2,7 +2,6 @@ package it.enlea.chirper.logic;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.SortedSet;
 
 import it.enlea.chirper.repository.model.Post;
