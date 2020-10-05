@@ -24,7 +24,7 @@ public class RequestDispatcher {
 		commandMap.put(RequestType.READ, new ReadService(postRepository, formatter));
 		commandMap.put(RequestType.FOLLOW, new FollowService(followRepository));
 		commandMap.put(RequestType.WALL, new WallCommand(postRepository, followRepository, formatter));
-		commandMap.put(null, new DoNothingService());
+		commandMap.put(RequestType.UNKNOW, new DoNothingService());
 		this.parser = parser;
 	}
 	

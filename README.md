@@ -13,7 +13,7 @@ Build project
 
 Run the application
 
-`java -jar /target/ChirperApp.jar`
+`java -jar target/ChirperApp.jar`
 
 Exit the application
 
