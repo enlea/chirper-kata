@@ -38,7 +38,7 @@ class FollowRepositoryTest {
 	}
 	
 	@Test
-	void getFollowingUserOfAnUnknowUserShuldReturnEmptySet() {
+	void getFollowingUserOfAnUnknowUserShouldReturnEmptySet() {
 		repository.insertFollowRelationship("Anna", "elsa");
 		Set<String> output 		= repository.getFollowingUserByUserName("elsa");
 		assertTrue(output.isEmpty());

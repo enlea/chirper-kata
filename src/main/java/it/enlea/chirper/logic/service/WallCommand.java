@@ -1,11 +1,10 @@
 package it.enlea.chirper.logic.service;
 
-import static it.enlea.chirper.logic.ParameterValidator.isValidUsername;
-
 import java.util.Set;
 import java.util.SortedSet;
 
-import it.enlea.chirper.logic.ConsoleOutputFormatter;
+import it.enlea.chirper.logic.ConsoleResponseFormatter;
+import it.enlea.chirper.logic.ResponseFormatter;
 import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;
 import it.enlea.chirper.logic.service.parameter.WallParameters;
 import it.enlea.chirper.repository.FollowRepository;
@@ -17,10 +16,12 @@ public class WallCommand implements SocialNetworkService {
 	private FollowRepository followRepository;
 	private PostRepository postRepository;
 	private WallParameters parameters;
+	private ResponseFormatter formatter;
 	
-	public WallCommand(PostRepository postRepository, FollowRepository followRepository) {
+	public WallCommand(PostRepository postRepository, FollowRepository followRepository, ResponseFormatter formatter) {
 		this.postRepository 	= postRepository;
 		this.followRepository	= followRepository;
+		this.formatter 			= formatter;
 	}
 
 	@Override
@@ -33,12 +34,10 @@ public class WallCommand implements SocialNetworkService {
 	public String execute() {
 		String userWall = new String();
 			String userName = parameters.getUserName();
-			if(isValidUsername(userName)) {
-				Set<String> usersToShow = followRepository.getFollowingUserByUserName(userName);
-				usersToShow.add(userName);
-				SortedSet<Post> wallPosts= postRepository.getPostListBySetOfUserName(usersToShow);
-				userWall = ConsoleOutputFormatter.formatWallPostList(wallPosts); 
-		}
+			Set<String> usersToShow = followRepository.getFollowingUserByUserName(userName);
+			usersToShow.add(userName);
+			SortedSet<Post> wallPosts= postRepository.getPostListBySetOfUserName(usersToShow);
+			userWall = formatter.formatWallPostList(wallPosts); 
 		return userWall;
 	}
 }

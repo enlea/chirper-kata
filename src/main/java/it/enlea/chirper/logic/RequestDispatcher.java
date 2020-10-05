@@ -19,11 +19,11 @@ public class RequestDispatcher {
 	
 	private InputCommandParser parser;
 	
-	public RequestDispatcher(PostRepository postRepository, FollowRepository followRepository, InputCommandParser parser) {
+	public RequestDispatcher(PostRepository postRepository, FollowRepository followRepository, InputCommandParser parser, ResponseFormatter formatter) {
 		commandMap.put(RequestType.POST, new PostService(postRepository));
-		commandMap.put(RequestType.READ, new ReadService(postRepository));
+		commandMap.put(RequestType.READ, new ReadService(postRepository, formatter));
 		commandMap.put(RequestType.FOLLOW, new FollowService(followRepository));
-		commandMap.put(RequestType.WALL, new WallCommand(postRepository, followRepository));
+		commandMap.put(RequestType.WALL, new WallCommand(postRepository, followRepository, formatter));
 		commandMap.put(null, new DoNothingService());
 		this.parser = parser;
 	}

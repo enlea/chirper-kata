@@ -11,7 +11,7 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.enlea.chirper.logic.ConsoleOutputFormatter;
+import it.enlea.chirper.logic.ConsoleResponseFormatter;
 import it.enlea.chirper.logic.service.ReadService;
 import it.enlea.chirper.logic.service.SocialNetworkService;
 import it.enlea.chirper.logic.service.parameter.ReadParameters;
@@ -24,11 +24,12 @@ class ReadServiceTest {
 	
 	SocialNetworkService command;
 	PostRepository postRepository;
-
+	ConsoleResponseFormatter formatter;
 	@BeforeEach
 	void initCommand() {
 		postRepository = new SessionPostRepository();
-		command = new ReadService(postRepository);
+		formatter = new ConsoleResponseFormatter();
+		command = new ReadService(postRepository,formatter);
 	}
 
 	@Test 
@@ -51,7 +52,7 @@ class ReadServiceTest {
 		
 		testList.forEach(p -> postRepository.insertPost(p));
 		
-		String expected	= ConsoleOutputFormatter.formatReadPostList(testList);
+		String expected	= formatter .formatReadPostList(testList);
 
 		String username = "anna";
 		RequestParametersInterface params = new ReadParameters(username);

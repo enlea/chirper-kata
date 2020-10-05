@@ -1,8 +1,5 @@
 package it.enlea.chirper.logic.service;
 
-import static it.enlea.chirper.logic.ParameterValidator.isValidMessage;
-import static it.enlea.chirper.logic.ParameterValidator.isValidUsername;
-
 import it.enlea.chirper.logic.service.parameter.PostParameters;
 import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;
 import it.enlea.chirper.repository.PostRepository;
@@ -25,10 +22,8 @@ public class PostService implements SocialNetworkService {
 	public String execute() {
 			String username = parameters.getUserName();
 			String message = parameters.getMessage();
-			if (isValidUsername(username) && isValidMessage(message)) {
-				Post post = new Post (username, message);
-				repository.insertPost(post);
-			}
+			Post post = new Post (username, message);
+			repository.insertPost(post);
 		return "";
 	}
 

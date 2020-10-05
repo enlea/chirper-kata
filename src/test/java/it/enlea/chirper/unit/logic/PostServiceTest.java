@@ -25,26 +25,16 @@ class PostServiceTest {
 	}
 	
 	@Test
-	void insertAPostShouldReturnEmptyString() {
-		RequestParametersInterface params = new PostParameters("elsa", "let it gooo");
-		command.setParameter(params);
-		String output = command.execute();
-		assertEquals("",output);
-	}
-	
-	@Test
-	void insertAnEmpityPostShouldReturnEmptyStringAndShuldNotAddMessage() {
+	void insertAPostShouldReturnEmptyStringAndShouldIncreaseThePostNumbers() {
 		String userName = "elsa";
-		
 		int previousMessageNum = postRepository.getPostListByUserName(userName).size();
-		RequestParametersInterface params = new PostParameters(userName, "");
+		RequestParametersInterface params = new PostParameters(userName, "let it gooo");
 		command.setParameter(params);
-		command.setParameter(params);
-		
 		String output = command.execute();
 		assertEquals("",output);
-		assertEquals(previousMessageNum,postRepository.getPostListByUserName(userName).size() );
+		assertEquals(previousMessageNum+1,postRepository.getPostListByUserName(userName).size() );
 	}
 	
+		
 	
 }

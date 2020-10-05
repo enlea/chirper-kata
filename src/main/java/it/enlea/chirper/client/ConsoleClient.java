@@ -12,7 +12,6 @@ public class ConsoleClient implements ChirperClientInterface{
 	
 	@Override
 	public String processCommand(String inputCommand) {
-		
 		return commandInvoker.executeCommand(inputCommand);
 	}
 	

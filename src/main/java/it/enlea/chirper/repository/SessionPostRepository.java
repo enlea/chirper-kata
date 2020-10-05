@@ -11,7 +11,7 @@ import it.enlea.chirper.repository.model.Post;
 public class SessionPostRepository implements PostRepository {
 	
 	private Map<String, SortedSet<Post>> postMap; 
-
+		
 	public SessionPostRepository() {
 		this.postMap = new HashMap<String, SortedSet<Post>>();
 	}

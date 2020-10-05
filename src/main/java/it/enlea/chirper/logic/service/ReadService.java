@@ -1,9 +1,8 @@
 package it.enlea.chirper.logic.service;
 
 import java.util.SortedSet;
-import static it.enlea.chirper.logic.ParameterValidator.isValidUsername;
-
-import it.enlea.chirper.logic.ConsoleOutputFormatter;
+import it.enlea.chirper.logic.ConsoleResponseFormatter;
+import it.enlea.chirper.logic.ResponseFormatter;
 import it.enlea.chirper.logic.service.parameter.ReadParameters;
 import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;
 import it.enlea.chirper.repository.PostRepository;
@@ -12,9 +11,11 @@ import it.enlea.chirper.repository.model.Post;
 public class ReadService implements SocialNetworkService {
 	private PostRepository repository;
 	private ReadParameters parameters;
+	private ResponseFormatter formatter;
 	
-	public ReadService(PostRepository postRepository) {
+	public ReadService(PostRepository postRepository, ResponseFormatter formatter) {
 		this.repository 	= postRepository;
+		this.formatter		= formatter;
 	}
 	
 	@Override
@@ -27,10 +28,8 @@ public class ReadService implements SocialNetworkService {
 	public String execute() {
 		String output = new String();
 			String userName = parameters.getUserName();
-			if (isValidUsername(userName)) {
-				SortedSet<Post> postList = repository.getPostListByUserName(userName);
-				output = ConsoleOutputFormatter.formatReadPostList(postList);
-			}
+			SortedSet<Post> postList = repository.getPostListByUserName(userName);
+			output = formatter.formatReadPostList(postList);
 		return output;	
 	}
 }

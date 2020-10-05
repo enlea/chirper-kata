@@ -10,7 +10,7 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.enlea.chirper.logic.ConsoleOutputFormatter;
+import it.enlea.chirper.logic.ConsoleResponseFormatter;
 import it.enlea.chirper.logic.service.SocialNetworkService;
 import it.enlea.chirper.logic.service.WallCommand;
 import it.enlea.chirper.logic.service.parameter.RequestParametersInterface;
@@ -28,12 +28,13 @@ class WallServiceTest {
 	PostRepository postRepository;
 	FollowRepository followRepository;
 	SortedSet<Post> testList = new TreeSet<Post>();
-
+	ConsoleResponseFormatter formatter;
 	@BeforeEach
 	void initCommand() {
 		postRepository = new SessionPostRepository();
 		followRepository = new SessionFollowRepository();
-		command = new WallCommand(postRepository, followRepository);
+		formatter = new ConsoleResponseFormatter();
+		command = new WallCommand(postRepository, followRepository,formatter);
 	}
 	@Test
 	void wallOfAUserShouldWork() {
@@ -42,7 +43,7 @@ class WallServiceTest {
 		followRepository.insertFollowRelationship("anna", "elsa");
 		followRepository.insertFollowRelationship("anna", "olaf");
 		
-		String expected = ConsoleOutputFormatter.formatWallPostList(testList);
+		String expected = formatter.formatWallPostList(testList);
 		RequestParametersInterface params = new WallParameters("anna");
 		command.setParameter(params);
 		String output = command.execute();
@@ -68,7 +69,7 @@ class WallServiceTest {
 		String username = "anna";
 		SortedSet<Post> userPost = postRepository.getPostListByUserName(username);
 		
-		String expected = ConsoleOutputFormatter.formatWallPostList(userPost);
+		String expected = formatter.formatWallPostList(userPost);
 		RequestParametersInterface params = new WallParameters(username);
 		command.setParameter(params);
 		String output = command.execute();
